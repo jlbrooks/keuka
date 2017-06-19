@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h3>Badges</h3>
+	<ul>
+	{% for badge in badges %}
+		<li><a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst}}</a></li>
+	{% endfor %}
+	</ul>
+{% endblock content %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<a href="{% url 'index' %}">Back to Badge list</a>
+	<h3>{{ badge.title|capfirst }}</h3>
+	<h4>Description</h4>
+	<p>{% autoescape off %} {{ badge.description_html }} {% endautoescape %}</p>
+{% endblock content %}

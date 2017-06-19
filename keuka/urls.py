@@ -16,6 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from badges import views
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+	url(r'^$', views.index, name='index'),
+	url(r'^badge/(?P<id>\d+)/', views.badge_detail, name='badge_detail'),
+	url(r'^admin/', admin.site.urls),
 ]
