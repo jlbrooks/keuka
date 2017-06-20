@@ -5,4 +5,10 @@
 	<h3>{{ badge.title|capfirst }}</h3>
 	<h4>Description</h4>
 	<p>{% autoescape off %} {{ badge.description_html }} {% endautoescape %}</p>
+	<h4>Requirements</h4>
+	<ol>
+	{% for requirement in requirements.all %}
+		<li>{{ requirement.title|capfirst}}</li>
+	{% endfor %}
+	</ol>
 {% endblock content %}

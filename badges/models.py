@@ -8,6 +8,9 @@ class Badge(models.Model):
 	title = models.CharField(max_length=100)
 	description = models.TextField()
 
+	def __str__(self):
+		return self.title
+
 	def description_html(self):
 		return markdown.markdown(self.description)
 
@@ -16,3 +19,8 @@ class Requirement(models.Model):
     title = models.TextField()
     details = models.TextField()
     sequence = models.IntegerField(default=0)
+
+    ordering = ('sequence')
+
+    def __str__(self):
+    	return self.title
