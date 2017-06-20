@@ -5,14 +5,15 @@ from django.db import models
 import markdown
 
 class Badge(models.Model):
-	title = models.CharField(max_length=100)
-	description = models.TextField()
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(null=True, upload_to='badge-images/')
 
-	def __str__(self):
-		return self.title
+    def __str__(self):
+        return self.title
 
-	def description_html(self):
-		return markdown.markdown(self.description)
+    def description_html(self):
+        return markdown.markdown(self.description)
 
 class Requirement(models.Model):
     badge = models.ForeignKey(Badge, on_delete=models.CASCADE)

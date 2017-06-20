@@ -3,6 +3,7 @@
 {% block content %}
 	<a href="{% url 'index' %}">Back to Badge list</a>
 	<h3>{{ badge.title|capfirst }}</h3>
+	<img height="100" width="100" src="{{ badge.image.url }}">
 	<h4>Description</h4>
 	<p>{% autoescape off %} {{ badge.description_html }} {% endautoescape %}</p>
 	<h4>Requirements</h4>

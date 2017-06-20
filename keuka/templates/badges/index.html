@@ -4,7 +4,10 @@
 	<h3>Badges</h3>
 	<ul>
 	{% for badge in badges %}
-		<li><a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst}}</a></li>
+		<li>
+		    <img height="40" width="40" src="{{ badge.image.url }}">
+		    <a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst}}</a>
+		</li>
 	{% endfor %}
 	</ul>
 {% endblock content %}
