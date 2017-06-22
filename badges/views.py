@@ -19,6 +19,4 @@ def badge_detail(request, id):
 		raise Http404('This badge does not exist')
 	return render(request, 'badges/badge_detail.html', {
 		'badge':badge,
-		'requirements':badge.requirement_set,
-
 	})

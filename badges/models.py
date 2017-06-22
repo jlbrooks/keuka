@@ -8,6 +8,7 @@ class Badge(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     image = models.ImageField(null=True, upload_to='badge-images/')
+    requirements = models.TextField(default='')
 
     def __str__(self):
         return self.title
@@ -15,13 +16,5 @@ class Badge(models.Model):
     def description_html(self):
         return markdown.markdown(self.description)
 
-class Requirement(models.Model):
-    badge = models.ForeignKey(Badge, on_delete=models.CASCADE)
-    title = models.TextField()
-    details = models.TextField()
-    sequence = models.IntegerField(default=0)
-
-    ordering = ('sequence')
-
-    def __str__(self):
-    	return self.title
+    def requirements_html(self):
+        return markdown.markdown(self.requirements)
