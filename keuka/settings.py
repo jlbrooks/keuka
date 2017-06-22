@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'keuka.cjntxdqgmd.us-east-1.elasticbeanstalk.com',
+    u'keuka.cjntxdqgmd.us-east-1.elasticbeanstalk.com',
+    u'keuka.me',
 ]
 
 
