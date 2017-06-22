@@ -5,8 +5,10 @@
 	<ul>
 	{% for badge in badges %}
 		<li>
-		    <img height="40" width="40" src="{{ badge.image.url }}">
-		    <a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst}}</a>
+			{% if badge.image %}
+			<img height="40" width="40" src="{{ badge.image.url }}">
+			{% endif %}
+			<a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst}}</a>
 		</li>
 	{% endfor %}
 	</ul>
