@@ -18,6 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AWS_STORAGE_BUCKET_NAME = 'keuka-assets'
 AWS_ACCESS_KEY_ID = 'AKIAIKYEYEMWZAE2DE7Q'
 AWS_SECRET_ACCESS_KEY = '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'
+AWS_S3_SECURE_URLS = False
 
 # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
 # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
