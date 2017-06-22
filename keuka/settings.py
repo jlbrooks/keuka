@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 AWS_STORAGE_BUCKET_NAME = 'keuka-assets'
-AWS_ACCESS_KEY_ID = 'AKIAIKYEYEMWZAE2DE7Q'
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_S3_SECURE_URLS = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
