@@ -12,7 +12,7 @@ class State:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.local_settings')
 import django
 django.setup()
-from badges.models import Badge, Requirement
+from badges.models import Badge
 
 def first_char_index(line):
 	for i,c in enumerate(line):
@@ -23,12 +23,11 @@ def first_char_index(line):
 def parse_md(fnames):
 	for fname in fnames:
 		with codecs.open(fname, mode='r', encoding='utf-8') as f:
-			badges = []
-			# Process the file 1 line at a time
 			state = State.FIRST_NAME
-			cur_badge = None
 			badge_title = ''
 			badge_description = ''
+			badge_reqs = ''
+			# Process the file 1 line at a time
 			for line in list(f):
 				if state == State.FIRST_NAME:
 					# Look for an h1
@@ -38,8 +37,6 @@ def parse_md(fnames):
 				elif state == State.DESCRIPTION:
 					# If we see an h2, we've gotten to requirements
 					if line[0:2] == '##':
-						cur_badge = Badge(title=badge_title, description=badge_description.strip())
-						cur_badge.save()
 						state = State.REQUIREMENTS
 					# All other lines are description
 					else:
@@ -47,17 +44,28 @@ def parse_md(fnames):
 				elif state == State.REQUIREMENTS:
 					# If we see another h1, we're done with this badge
 					if line[0] == '#':
+						cur_badge = Badge(
+							title=badge_title,
+							description=badge_description.strip(),
+							requirements=badge_reqs.strip())
+						cur_badge.save()
+
+						# Reset description and requirements
+						badge_description = ''
+						badge_reqs = ''
+
 						badge_title = line[1:].strip()
 						state = State.DESCRIPTION
 						continue
-					# Every line starting with a number is a requirement
-					try:
-						num = int(line[0])
-						title = line[first_char_index(line):]
-						req = Requirement(badge=cur_badge, title=title, sequence=num)
-						req.save()
-					except ValueError:
-						pass
+					# All other lines are requirements
+					else:
+						badge_reqs += line
+			# Add the final badge
+			cur_badge = Badge(
+							title=badge_title,
+							description=badge_description.strip(),
+							requirements=badge_reqs.strip())
+			cur_badge.save()
 
 
 if __name__ == '__main__':
