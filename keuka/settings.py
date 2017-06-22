@@ -106,7 +106,7 @@ if 'RDS_DB_NAME' in os.environ:
     # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
     # you run `collectstatic`).
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    MEDIA_URL = STATIC_URL % '/media/'
+    MEDIA_URL = STATIC_URL % 'media/'
     MEDIA_ROOT = MEDIA_URL
 
 else:
