@@ -6,12 +6,18 @@
 	<div class="row">
 	{% for badge in badges %}
 		<div class="col s12 m6 l4">
-			 <div class="chip">
-				{% if badge.image %}
-					<img height="40" width="40" src="{{ badge.image.url }}">
-				{% endif %}
-				<a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst }}</a>
-			</div>
+			<div class="card">
+		        <div class="card-image">
+					{% if badge.image %}
+						<a href="{% url 'badge_detail' badge.id %}">
+							<img width=200 src="{{ badge.image.url }}">
+						</a>
+					{% endif %}
+		        </div>
+		        <div class="card-action">
+	                <a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst }}</a>
+	            </div>
+            </div>
 		</div>
 	{% endfor %}
 	</div>
