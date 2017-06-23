@@ -9,10 +9,11 @@ class State:
 	REQUIREMENTS = 3
 
 # Setup Django, import relevant models
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.local_settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.settings')
 import django
 django.setup()
 from badges.models import Badge
+Badge.objects.all().delete()
 
 def first_char_index(line):
 	for i,c in enumerate(line):
@@ -31,19 +32,19 @@ def parse_md(fnames):
 			for line in list(f):
 				if state == State.FIRST_NAME:
 					# Look for an h1
-					if line[0] == '#':
+					if line[0:2] == '# ':
 						badge_title = line[1:].strip()
 						state = State.DESCRIPTION
 				elif state == State.DESCRIPTION:
 					# If we see an h2, we've gotten to requirements
-					if line[0:2] == '##':
+					if line[0:3] == '## ':
 						state = State.REQUIREMENTS
 					# All other lines are description
 					else:
 						badge_description += line
 				elif state == State.REQUIREMENTS:
 					# If we see another h1, we're done with this badge
-					if line[0] == '#':
+					if line[0:2] == '# ':
 						cur_badge = Badge(
 							title=badge_title,
 							description=badge_description.strip(),
