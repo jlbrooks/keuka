@@ -105,7 +105,8 @@ if 'RDS_DB_NAME' in os.environ:
 
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     STATIC_URL = AWS_URL + 'static/'
-    STATIC_ROOT = STATIC_URL
+    # STATIC_ROOT = STATIC_URL
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     MEDIA_URL = AWS_URL + 'media/'
     MEDIA_ROOT = MEDIA_URL
 

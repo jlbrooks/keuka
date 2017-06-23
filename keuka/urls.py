@@ -25,3 +25,4 @@ urlpatterns = [
 	url(r'^badge/(?P<id>\d+)/', views.badge_detail, name='badge_detail'),
 	url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
