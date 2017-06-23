@@ -9,11 +9,11 @@ class State:
 	REQUIREMENTS = 3
 
 # Setup Django, import relevant models
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'local.settings')
 import django
 django.setup()
 from badges.models import Badge
-Badge.objects.all().delete()
+# Badge.objects.all().delete()
 
 def first_char_index(line):
 	for i,c in enumerate(line):
