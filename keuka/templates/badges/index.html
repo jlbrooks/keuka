@@ -2,18 +2,18 @@
 
 {% block content %}
 <div class="container">
-	<h3>Badges</h3>
-	<ul>
+	<h3>Keuka Komplishments</h3>
+	<div class="row">
 	{% for badge in badges %}
-		<li>
+		<div class="col s12 m6 l4">
 			 <div class="chip">
 				{% if badge.image %}
 					<img height="40" width="40" src="{{ badge.image.url }}">
 				{% endif %}
 				<a href="{% url 'badge_detail' badge.id %}">{{ badge.title|capfirst }}</a>
 			</div>
-		</li>
+		</div>
 	{% endfor %}
-	</ul>
+	</div>
 </div>
 {% endblock content %}
