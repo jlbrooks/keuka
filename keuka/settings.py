@@ -101,9 +101,9 @@ if 'RDS_DB_NAME' in os.environ:
     # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
     # We also use it in the next setting.
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_URL = "http://%s/" % AWS_S3_CUSTOM_DOMAIN
 
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    AWS_URL = "http://%s/" % AWS_S3_CUSTOM_DOMAIN
     STATIC_URL = AWS_URL + 'static/'
     STATIC_ROOT = STATIC_URL
     MEDIA_URL = AWS_URL + 'media/'
