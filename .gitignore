@@ -2,7 +2,6 @@
 *.swp
 *.sqlite3
 local_settings.py
-static
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
