@@ -6,6 +6,6 @@ from django.contrib import admin
 from .models import Badge
 
 class BadgeAdmin(admin.ModelAdmin):
-	list_display = ['title', 'description']
+	list_display = ['title', 'brief']
 
 admin.site.register(Badge, BadgeAdmin)

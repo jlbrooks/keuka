@@ -9,7 +9,6 @@
 	<img height="100" width="100" src="{{ badge.image.url }}">
 	{% endif %}
 	<p>{{ badge.brief }}</p>
-	<h3>Description</h3>
 	<p>{% autoescape off %} {{ badge.description_html }} {% endautoescape %}</p>
 	<h3>Requirements</h3>
 	<p>{% autoescape off %} {{ badge.requirements_html }} {% endautoescape %}</p>
