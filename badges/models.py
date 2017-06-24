@@ -6,6 +6,7 @@ import markdown
 
 class Badge(models.Model):
     title = models.CharField(max_length=100)
+    brief = models.CharField(max_length = 200, default=' ')
     description = models.TextField()
     image = models.ImageField(null=True, upload_to='badge-images/')
     requirements = models.TextField(default='')

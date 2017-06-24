@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-	<h3>Keuka Komplishments</h3>
 	<div class="row">
 	{% for badge in badges %}
 		<div class="col s12 m6 l4">
@@ -22,11 +20,10 @@
 	            </div>
 	            <div class="card-reveal">
 					<span class="card-title grey-text text-darken-4">{{ badge.title|capfirst }}<i class="material-icons right">close</i></span>
-			        <p>{{ badge.description }}</p>
+			        <p>{{ badge.brief }}</p>
 			    </div>
             </div>
 		</div>
 	{% endfor %}
 	</div>
-</div>
 {% endblock content %}

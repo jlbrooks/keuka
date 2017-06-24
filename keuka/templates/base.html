@@ -10,10 +10,20 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 	<body>
+		<div class="container">
+	    <nav>
+			<div class="nav-wrapper">
+			<a href="{% url 'index' %}" class="brand-logo">Keuka Komplishments</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li><a href="">Login</a></li>
+				</ul>
+			</div>
+		</nav>
 		{% block content %}
 		{% endblock content %}
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
-      </script>
-      <script type="text/javascript" src="{% static 'js/bin/materialize.min.js' %}"></script>
+		</div>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
+		</script>
+		<script type="text/javascript" src="{% static 'js/bin/materialize.min.js' %}"></script>
 	</body>
 </html>
