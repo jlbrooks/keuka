@@ -6,11 +6,9 @@
 		<div class="col s12 m6 l4">
 			<div class="card">
 		        <div class="card-image">
-					{% if badge.image %}
-						<a href="{% url 'badge_detail' badge.id %}">
-							<img width=200 src="{{ badge.image.url }}">
-						</a>
-					{% endif %}
+					<a href="{% url 'badge_detail' badge.id %}">
+						<img width=200 src="{{ badge.image_url }}">
+					</a>
 		        </div>
 
 		        <div class="card-content">

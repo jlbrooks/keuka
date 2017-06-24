@@ -5,9 +5,7 @@
 
 
 	<h2>{{ badge.title|capfirst }}</h2>
-	{% if badge.image %}
-	<img height="100" width="100" src="{{ badge.image.url }}">
-	{% endif %}
+	<img height="100" width="100" src="{{ badge.image_url }}">
 	<p>{{ badge.brief }}</p>
 	<p>{% autoescape off %} {{ badge.description_html }} {% endautoescape %}</p>
 	<h3>Requirements</h3>
