@@ -7,6 +7,7 @@ colorama==0.3.7
 Django==1.11.2
 django-assets==0.12
 django-storages==1.6.1
+django-widget-tweaks==1.4.1
 docker-py==1.7.2
 dockerpty==0.4.1
 docopt==0.6.2

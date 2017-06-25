@@ -17,12 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.contrib.auth import views as auth_views
 from badges import views
 
 urlpatterns = [
-	url(r'^$', views.index, name='index'),
-	url(r'^badge/(?P<id>\d+)/', views.badge_detail, name='badge_detail'),
-	url(r'^admin/', admin.site.urls),
+    url(r'^$', views.index, name='index'),
+    url(r'^badge/(?P<id>\d+)/', views.badge_detail, name='badge_detail'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^signup/$', views.signup, name='signup'),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

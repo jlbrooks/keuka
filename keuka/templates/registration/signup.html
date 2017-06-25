@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+  <form method="post" class="col s12">
+  <h3>Sign up</h3>
+    {% csrf_token %}
+    {% for field in form %}
+	    <div class="row">
+	        <div class="input-field col s12">
+		        {{ field.label_tag }}<br>
+		        {{ field|add_class:"validate" }}
+		        {% if field.help_text %}
+		          <small style="color: grey">
+		              {% autoescape off %} {{ field.help_text }} {% endautoescape %}
+		          </small>
+		        {% endif %}
+		        {% for error in field.errors %}
+		          <p style="color: red">{{ error }}</p>
+		        {% endfor %}
+	        </div>
+        </div>
+    {% endfor %}
+    <button type="submit">Sign up</button>
+  </form>
+</div>
+{% endblock %}
