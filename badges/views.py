@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -23,9 +23,17 @@ def badge_detail(request, id):
         badge = Badge.objects.get(id=id)
     except Badge.DoesNotExist:
         raise Http404('This badge does not exist')
-    return render(request, 'badges/badge_detail.html', {
-        'badge':badge,
-    })
+
+    context = {
+        'badge': badge,
+        'action_text': '',
+    }
+
+    if request.user.is_authenticated:
+        user = BadgeUser.objects.get(pk=request.user.id)
+        context['action_text'] = user.action_text(badge)
+
+    return render(request, 'badges/badge_detail.html', context)
 
 def badges_for_user(request):
     if request.user.is_authenticated():
@@ -53,19 +61,15 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-def start_earning(request, id):
+def increment_progress(request, id):
     try:
         badge = Badge.objects.get(id=id)
     except Badge.DoesNotExist:
         raise Http404('This badge does not exist')
     if request.user.is_authenticated():
         user = BadgeUser.objects.get(pk=request.user.id)
-        user.start_earning(badge)
-        return render(request, 'badges/badges_for_user.html', {
-            'started_badges': user.started_badges(),
-            'pending_badges': user.pending_badges(),
-            'earned_badges': user.earned_badges(),
-        })
+        user.increment_progress(badge)
+        return redirect('badge_detail', id=badge.id)
     else:
-        raise Http404('Must be logged in to work on a badge')
+        raise HttpResponseBadRequest('Must be logged in to work on a badge')
 

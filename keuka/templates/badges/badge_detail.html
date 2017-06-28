@@ -18,11 +18,11 @@
 					<p>{% autoescape off %} {{ badge.requirements_html }} {% endautoescape %}</p>
 				</div>
 				<div class="card-action">
-					{% if user.is_authenticated %}
-					<form action="{% url 'start_earning' badge.id %}" method="post">
+					{% if user.is_authenticated and action_text %}
+					<form action="{% url 'increment_progress' badge.id %}" method="post">
 						{% csrf_token %}
 						<button class="btn waves-effect waves-light" type="submit" name="action">
-							Start Earning <i class="material-icons right">send</i>
+							{{ action_text }} <i class="material-icons right">send</i>
 						</button>
 					</form>
 					

@@ -5,6 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 import markdown
 
 BADGE_DIR = 'badge-images/'
@@ -40,13 +41,29 @@ class BadgeUser(User):
     class Meta:
         proxy = True
 
-    def start_earning(self, badge):
-        starting = BadgeEarner(
-            earner = self,
-            badge = badge
-        )
-        starting.save()
-        return starting
+    def increment_progress(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+            earner.advance_status()
+        except BadgeEarner.DoesNotExist:
+            earner = BadgeEarner(
+                earner = self,
+                badge = badge
+            )
+            earner.save()
+        
+        return earner
+
+    def action_text(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+        except BadgeEarner.DoesNotExist:
+            return 'Start Earning'
+
+        if earner.status == BadgeEarner.STARTED:
+            return 'Submit For Approval'
+
+        return ''
 
     def started_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.STARTED)
@@ -56,6 +73,8 @@ class BadgeUser(User):
 
     def earned_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.EARNED)
+
+    
 
 
 class BadgeEarner(models.Model):
@@ -74,3 +93,15 @@ class BadgeEarner(models.Model):
     date_submitted_for_approval = models.DateField(blank=True, null=True)
     date_earned = models.DateField(blank=True, null=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=STARTED)
+
+    def advance_status(self):
+        if self.status == BadgeEarner.STARTED:
+            self.status = BadgeEarner.NEEDS_APPROVAL
+            self.date_submitted_for_approval = timezone.now()
+        elif self.status == BadgeEarner.NEEDS_APPROVAL:
+            self.status = BadgeEarner.EARNED
+            self.date_earned = timezone.now()
+        self.save()
+
+    class Meta:
+        unique_together = ('earner', 'badge')
