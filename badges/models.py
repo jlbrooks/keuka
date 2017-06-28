@@ -37,6 +37,13 @@ class Badge(models.Model):
     def requirements_html(self):
         return markdown.markdown(self.requirements)
 
+    def prereq_text(self):
+        text = 'Required badges: '
+        for prereq in self.prereqs.all():
+            text += str(prereq)
+            text += ', '
+        return text[:-2]
+
 
 class BadgeUser(User):
     class Meta:
@@ -73,6 +80,10 @@ class BadgeUser(User):
         return earner
 
     def action_text(self, badge):
+        # No action if we can't make progress
+        if not self.can_increment_progress(badge):
+            return ''
+
         try:
             earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
         except BadgeEarner.DoesNotExist:
@@ -80,6 +91,16 @@ class BadgeUser(User):
 
         if earner.status == BadgeEarner.STARTED:
             return 'Submit For Approval'
+
+        return ''
+
+    def info_text(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+        except BadgeEarner.DoesNotExist:
+            return badge.prereq_text()
+
+        # TODO: We could return something here when we are waiting for approval (out of scope of this PR)
 
         return ''
 
@@ -133,4 +154,7 @@ class BadgePrerequisite(models.Model):
     badge = models.ForeignKey(Badge, related_name='prereqs')
     required_badge = models.ForeignKey(Badge, related_name='required_for_set')
     min_badge_status = models.IntegerField(choices=BadgeEarner.STATUS_CHOICES, default=BadgeEarner.EARNED)
+
+    def __str__(self):
+        return str(self.required_badge) + ':' + BadgeEarner.STATUS_CHOICES[self.min_badge_status][1]
 

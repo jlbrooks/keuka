@@ -27,11 +27,13 @@ def badge_detail(request, id):
     context = {
         'badge': badge,
         'action_text': '',
+        'info_text': '',
     }
 
     if request.user.is_authenticated:
         user = BadgeUser.objects.get(pk=request.user.id)
         context['action_text'] = user.action_text(badge)
+        context['info_text'] = user.info_text(badge)
 
     return render(request, 'badges/badge_detail.html', context)
 
