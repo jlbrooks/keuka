@@ -100,6 +100,7 @@ class BadgeEarner(models.Model):
             self.date_submitted_for_approval = timezone.now()
         elif self.status == BadgeEarner.NEEDS_APPROVAL:
             self.status = BadgeEarner.EARNED
+            self.date_earned = timezone.now()
         self.save()
 
     class Meta:
