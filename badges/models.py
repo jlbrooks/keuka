@@ -5,6 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 import markdown
 
 BADGE_DIR = 'badge-images/'
@@ -96,6 +97,7 @@ class BadgeEarner(models.Model):
     def advance_status(self):
         if self.status == BadgeEarner.STARTED:
             self.status = BadgeEarner.NEEDS_APPROVAL
+            self.date_submitted_for_approval = timezone.now()
         elif self.status == BadgeEarner.NEEDS_APPROVAL:
             self.status = BadgeEarner.EARNED
         self.save()
