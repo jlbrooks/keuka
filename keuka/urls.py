@@ -27,4 +27,6 @@ urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^start_earning/(?P<id>\d+)/$', views.start_earning, name='start_earning'),
+    url(r'^badges_for_user', views.badges_for_user, name='badges_for_user'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

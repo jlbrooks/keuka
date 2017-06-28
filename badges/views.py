@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from keuka.forms import SignUpForm
 
 from badges.models import Badge
+from badges.models import BadgeUser
 
 def index(request):
     badges = Badge.objects.all().order_by('title')
@@ -26,6 +27,18 @@ def badge_detail(request, id):
         'badge':badge,
     })
 
+def badges_for_user(request):
+    if request.user.is_authenticated():
+        user = BadgeUser.objects.get(pk=request.user.id)
+        return render(request, 'badges/badges_for_user.html', {
+            'started_badges': user.started_badges(),
+            'pending_badges': user.pending_badges(),
+            'earned_badges': user.earned_badges(),
+        })
+    else:
+        form = SignUpForm()
+        return render(request, 'registration/signup.html', {'form': form})
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -39,4 +52,20 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+def start_earning(request, id):
+    try:
+        badge = Badge.objects.get(id=id)
+    except Badge.DoesNotExist:
+        raise Http404('This badge does not exist')
+    if request.user.is_authenticated():
+        user = BadgeUser.objects.get(pk=request.user.id)
+        user.start_earning(badge)
+        return render(request, 'badges/badges_for_user.html', {
+            'started_badges': user.started_badges(),
+            'pending_badges': user.pending_badges(),
+            'earned_badges': user.earned_badges(),
+        })
+    else:
+        raise Http404('Must be logged in to work on a badge')
 

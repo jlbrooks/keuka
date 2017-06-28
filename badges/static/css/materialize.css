@@ -3126,7 +3126,7 @@ nav {
     color: #fff;
     display: inline-block;
     font-size: 1.4rem;
-    padding: 0;
+    padding: 0 0 0 20px;
     white-space: nowrap; }
     nav .brand-logo.center {
       left: 50%;
@@ -6788,3 +6788,5 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
   stroke-width: 4;
   stroke-linecap: round;
   /*shape-rendering: crispEdges;*/ }
+
+/*# sourceMappingURL=materialize.css.map */

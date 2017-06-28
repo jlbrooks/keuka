@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row" id="badges">
+	<div class="col s12">
+		<h4>Badges You've Started</h4>
+	</div>
+	<div class="list">
+		{% for started in started_badges %}
+		<div class="col s12 m6 l4">
+			<div class="card">
+				<div class="card-image">
+					<a href="{% url 'badge_detail' started.badge.id %}">
+						<img width=200 src="{{ started.badge.image_url }}">
+					</a>
+				</div>
+
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4 badge-title">{{ started.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+
+					<a href="{% url 'badge_detail' started.badge.id %}">Learn more.</a>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">{{ started.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+					<p>{{ started.badge.brief }}</p>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="col s12">
+		<h4>Badges Waiting for Approval</h4>
+	</div>
+	<div class="list">
+		{% for pending in pending_badges %}
+		<div class="col s12 m6 l4">
+			<div class="card">
+				<div class="card-image">
+					<a href="{% url 'badge_detail' pending.badge.id %}">
+						<img width=200 src="{{ pending.badge.image_url }}">
+					</a>
+				</div>
+
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4 badge-title">{{ pending.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+
+					<a href="{% url 'badge_detail' pending.badge.id %}">Learn more.</a>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">{{ pending.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+					<p>{{ pending.badge.brief }}</p>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+		<div class="col s12">
+		<h4>Badges Earned</h4>
+	</div>
+	<div class="list">
+		{% for earned in earned_badges %}
+		<div class="col s12 m6 l4">
+			<div class="card">
+				<div class="card-image">
+					<a href="{% url 'badge_detail' earned.badge.id %}">
+						<img width=200 src="{{ earned.badge.image_url }}">
+					</a>
+				</div>
+
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4 badge-title">{{ earned.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+					
+					<a href="{% url 'badge_detail' earned.badge.id %}">Learn more.</a>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">{{ earned.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+					<p>{{ earned.badge.brief }}</p>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+</div>
+{% endblock content %}
+
+{% block resources %}
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		var options = {
+			valueNames: ['badge-title']
+		};
+		var userList = new List('badges', options)
+	});
+</script>
+{% endblock resources %}
