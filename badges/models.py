@@ -74,3 +74,6 @@ class BadgeEarner(models.Model):
     date_submitted_for_approval = models.DateField(blank=True, null=True)
     date_earned = models.DateField(blank=True, null=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=STARTED)
+
+    class Meta:
+        unique_together = ('earner', 'badge')
