@@ -6,79 +6,97 @@
 		<h4>Badges You've Started</h4>
 	</div>
 	<div class="list">
-		{% for started in started_badges %}
-		<div class="col s12 m6 l4">
-			<div class="card">
-				<div class="card-image">
-					<a href="{% url 'badge_detail' started.badge.id %}">
-						<img width=200 src="{{ started.badge.image_url }}">
-					</a>
-				</div>
+		{% if started_badges %}
+			{% for started in started_badges %}
+			<div class="col s12 m6 l4">
+				<div class="card">
+					<div class="card-image">
+						<a href="{% url 'badge_detail' started.badge.id %}">
+							<img width=200 src="{{ started.badge.image_url }}">
+						</a>
+					</div>
 
-				<div class="card-content">
-					<span class="card-title activator grey-text text-darken-4 badge-title">{{ started.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+					<div class="card-content">
+						<span class="card-title activator grey-text text-darken-4 badge-title">{{ started.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
 
-					<a href="{% url 'badge_detail' started.badge.id %}">Learn more.</a>
-				</div>
-				<div class="card-reveal">
-					<span class="card-title grey-text text-darken-4">{{ started.badge.title|capfirst }}<i class="material-icons right">close</i></span>
-					<p>{{ started.badge.brief }}</p>
+						<a href="{% url 'badge_detail' started.badge.id %}">Learn more.</a>
+					</div>
+					<div class="card-reveal">
+						<span class="card-title grey-text text-darken-4">{{ started.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+						<p>{{ started.badge.brief }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
+		{% else %}
+			<div class="col s12">
+				Nothing! <a href="{% url 'index' %}"> Why not look for something to work on?</a>
+			</div>
+		{% endif %}
 	</div>
 	<div class="col s12">
 		<h4>Badges Waiting for Approval</h4>
 	</div>
 	<div class="list">
-		{% for pending in pending_badges %}
-		<div class="col s12 m6 l4">
-			<div class="card">
-				<div class="card-image">
-					<a href="{% url 'badge_detail' pending.badge.id %}">
-						<img width=200 src="{{ pending.badge.image_url }}">
-					</a>
-				</div>
+		{% if pending_badges %}
+			{% for pending in pending_badges %}
+			<div class="col s12 m6 l4">
+				<div class="card">
+					<div class="card-image">
+						<a href="{% url 'badge_detail' pending.badge.id %}">
+							<img width=200 src="{{ pending.badge.image_url }}">
+						</a>
+					</div>
 
-				<div class="card-content">
-					<span class="card-title activator grey-text text-darken-4 badge-title">{{ pending.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+					<div class="card-content">
+						<span class="card-title activator grey-text text-darken-4 badge-title">{{ pending.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
 
-					<a href="{% url 'badge_detail' pending.badge.id %}">Learn more.</a>
-				</div>
-				<div class="card-reveal">
-					<span class="card-title grey-text text-darken-4">{{ pending.badge.title|capfirst }}<i class="material-icons right">close</i></span>
-					<p>{{ pending.badge.brief }}</p>
+						<a href="{% url 'badge_detail' pending.badge.id %}">Learn more.</a>
+					</div>
+					<div class="card-reveal">
+						<span class="card-title grey-text text-darken-4">{{ pending.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+						<p>{{ pending.badge.brief }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
+		{% else %}
+			<div class="col s12">
+				None!</a>
+			</div>
+		{% endif %}
 	</div>
 		<div class="col s12">
 		<h4>Badges Earned</h4>
 	</div>
 	<div class="list">
-		{% for earned in earned_badges %}
-		<div class="col s12 m6 l4">
-			<div class="card">
-				<div class="card-image">
-					<a href="{% url 'badge_detail' earned.badge.id %}">
-						<img width=200 src="{{ earned.badge.image_url }}">
-					</a>
-				</div>
+		{% if earned_badges %}
+			{% for earned in earned_badges %}
+			<div class="col s12 m6 l4">
+				<div class="card">
+					<div class="card-image">
+						<a href="{% url 'badge_detail' earned.badge.id %}">
+							<img width=200 src="{{ earned.badge.image_url }}">
+						</a>
+					</div>
 
-				<div class="card-content">
-					<span class="card-title activator grey-text text-darken-4 badge-title">{{ earned.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
-					
-					<a href="{% url 'badge_detail' earned.badge.id %}">Learn more.</a>
-				</div>
-				<div class="card-reveal">
-					<span class="card-title grey-text text-darken-4">{{ earned.badge.title|capfirst }}<i class="material-icons right">close</i></span>
-					<p>{{ earned.badge.brief }}</p>
+					<div class="card-content">
+						<span class="card-title activator grey-text text-darken-4 badge-title">{{ earned.badge.title|capfirst }}<i class="material-icons right">more_vert</i></span>
+						
+						<a href="{% url 'badge_detail' earned.badge.id %}">Learn more.</a>
+					</div>
+					<div class="card-reveal">
+						<span class="card-title grey-text text-darken-4">{{ earned.badge.title|capfirst }}<i class="material-icons right">close</i></span>
+						<p>{{ earned.badge.brief }}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
+		{% else %}
+			<div class="col s12">
+				None yet. Better get moving!</a>
+			</div>
+		{% endif %}
 	</div>
 
 </div>
