@@ -25,7 +25,8 @@ def badge_detail(request, id):
         raise Http404('This badge does not exist')
 
     context = {
-        'badge': badge
+        'badge': badge,
+        'action_text': '',
     }
 
     if request.user.is_authenticated:
