@@ -52,9 +52,11 @@ class BadgeUser(User):
             for prereq in badge.prereqs.all():
                 try:
                     req_earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = prereq.required_badge.id)
-                    return BadgeEarner.status_geq(req_earner.status, prereq.min_badge_status)
+                    if not BadgeEarner.status_geq(req_earner.status, prereq.min_badge_status):
+                        return False
                 except BadgeEarner.DoesNotExist:
                     return False
+            return True
 
     # Prereq: Must call can_increment_progress first
     def increment_progress(self, badge):
@@ -120,7 +122,7 @@ class BadgeEarner(models.Model):
 
     # Compares two statuses, returning whether the first is further along than or equal to the second
     @classmethod
-    def status_geq(a,b):
+    def status_geq(cls,a,b):
         return a >= b
 
     class Meta:
