@@ -23,9 +23,16 @@ def badge_detail(request, id):
         badge = Badge.objects.get(id=id)
     except Badge.DoesNotExist:
         raise Http404('This badge does not exist')
-    return render(request, 'badges/badge_detail.html', {
-        'badge':badge,
-    })
+
+    context = {
+        'badge': badge
+    }
+
+    if request.user.is_authenticated:
+        user = BadgeUser.objects.get(pk=request.user.id)
+        context['action_text'] = user.action_text(badge)
+
+    return render(request, 'badges/badge_detail.html', context)
 
 def badges_for_user(request):
     if request.user.is_authenticated():

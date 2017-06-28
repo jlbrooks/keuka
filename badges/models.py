@@ -53,6 +53,17 @@ class BadgeUser(User):
         
         return earner
 
+    def action_text(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+        except BadgeEarner.DoesNotExist:
+            return 'Start Earning'
+
+        if earner.status == BadgeEarner.STARTED:
+            return 'Submit For Approval'
+
+        return ''
+
     def started_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.STARTED)
 
@@ -61,6 +72,7 @@ class BadgeUser(User):
 
     def earned_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.EARNED)
+
     
 
 
