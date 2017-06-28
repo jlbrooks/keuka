@@ -37,10 +37,26 @@ class Badge(models.Model):
     def requirements_html(self):
         return markdown.markdown(self.requirements)
 
+
 class BadgeUser(User):
     class Meta:
         proxy = True
 
+    def can_increment_progress(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+            # We could prevent from moving to `earned` here
+            return True
+        except BadgeEarner.DoesNotExist:
+            # Ensure that we meet the pre-reqs to start a badge
+            for prereq in badge.prereqs.all():
+                try:
+                    req_earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = prereq.required_badge.id)
+                    return BadgeEarner.status_geq(req_earner.status, prereq.min_badge_status)
+                except BadgeEarner.DoesNotExist:
+                    return False
+
+    # Prereq: Must call can_increment_progress first
     def increment_progress(self, badge):
         try:
             earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
@@ -74,7 +90,6 @@ class BadgeUser(User):
     def earned_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.EARNED)
 
-    
 
 
 class BadgeEarner(models.Model):
@@ -103,5 +118,17 @@ class BadgeEarner(models.Model):
             self.date_earned = timezone.now()
         self.save()
 
+    # Compares two statuses, returning whether the first is further along than or equal to the second
+    @classmethod
+    def status_geq(a,b):
+        return a >= b
+
     class Meta:
         unique_together = ('earner', 'badge')
+
+
+class BadgePrerequisite(models.Model):
+    badge = models.ForeignKey(Badge, related_name='prereqs')
+    required_badge = models.ForeignKey(Badge, related_name='required_for_set')
+    min_badge_status = models.IntegerField(choices=BadgeEarner.STATUS_CHOICES, default=BadgeEarner.EARNED)
+

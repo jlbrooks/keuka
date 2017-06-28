@@ -68,7 +68,8 @@ def increment_progress(request, id):
         raise Http404('This badge does not exist')
     if request.user.is_authenticated():
         user = BadgeUser.objects.get(pk=request.user.id)
-        user.increment_progress(badge)
+        if user.can_increment_progress(badge):
+            user.increment_progress(badge)
         return redirect('badge_detail', id=badge.id)
     else:
         raise HttpResponseBadRequest('Must be logged in to work on a badge')
