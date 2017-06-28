@@ -61,11 +61,7 @@ def increment_progress(request, id):
     if request.user.is_authenticated():
         user = BadgeUser.objects.get(pk=request.user.id)
         user.increment_progress(badge)
-        return render(request, 'badges/badges_for_user.html', {
-            'started_badges': user.started_badges(),
-            'pending_badges': user.pending_badges(),
-            'earned_badges': user.earned_badges(),
-        })
+        return redirect('badge_detail', id=badge.id)
     else:
         raise HttpResponseBadRequest('Must be logged in to work on a badge')
 
