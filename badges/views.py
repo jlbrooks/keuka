@@ -27,11 +27,13 @@ def badge_detail(request, id):
     context = {
         'badge': badge,
         'action_text': '',
+        'info_text': '',
     }
 
     if request.user.is_authenticated:
         user = BadgeUser.objects.get(pk=request.user.id)
         context['action_text'] = user.action_text(badge)
+        context['info_text'] = user.info_text(badge)
 
     return render(request, 'badges/badge_detail.html', context)
 
@@ -68,7 +70,8 @@ def increment_progress(request, id):
         raise Http404('This badge does not exist')
     if request.user.is_authenticated():
         user = BadgeUser.objects.get(pk=request.user.id)
-        user.increment_progress(badge)
+        if user.can_increment_progress(badge):
+            user.increment_progress(badge)
         return redirect('badge_detail', id=badge.id)
     else:
         raise HttpResponseBadRequest('Must be logged in to work on a badge')
