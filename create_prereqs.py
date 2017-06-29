@@ -43,6 +43,12 @@ def create_natural_prereqs(badges, save=False):
 				print "Couldn't find pre-requisite for badge: " + badge.title
 				continue
 			prev_badge = prev_badges[0]
+			try:
+				prereq = BadgePrerequisite.objects.get(badge=badge, required_badge=prev_badge)
+				print 'Found existing prereq for badge: ' + str(badge) + ': ' + str(prereq)
+				continue
+			except BadgePrerequisite.DoesNotExist:
+				pass
 			prereq = BadgePrerequisite(badge=badge, required_badge=prev_badge)
 			print 'Creating prereq for badge: ' + str(badge) + ': ' + str(prereq)
 			if save:
