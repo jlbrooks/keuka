@@ -46,8 +46,7 @@ def create_natural_prereqs(badges, save=False):
 			prereq = BadgePrerequisite(badge=badge, required_badge=prev_badge)
 			print 'Creating prereq for badge: ' + str(badge) + ': ' + str(prereq)
 			if save:
-				print "saving!"
-				#prereq.save()
+				prereq.save()
 
 
 if __name__ == '__main__':
