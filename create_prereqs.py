@@ -1,6 +1,7 @@
 import os
+import sys
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.local_settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'keuka.settings')
 import django
 django.setup()
 from badges.models import Badge, BadgePrerequisite
@@ -29,9 +30,8 @@ def strip_sequence(title):
 		return title
 	return ' '.join(title.split(' ')[:-1])
 
-def create_natural_prereqs(badges):
+def create_natural_prereqs(badges, save=False):
 	for badge in badges:
-		#print badge.title + ': ' + str(sequence_number(badge.title))
 		seq = sequence_number(badge.title)
 		if seq > 1:
 			required_seq = seq - 1
@@ -43,12 +43,15 @@ def create_natural_prereqs(badges):
 				print "Couldn't find pre-requisite for badge: " + badge.title
 				continue
 			prev_badge = prev_badges[0]
-			#print '<--- ' + prev_badge.title
 			prereq = BadgePrerequisite(badge=badge, required_badge=prev_badge)
 			print 'Creating prereq for badge: ' + str(badge) + ': ' + str(prereq)
+			if save:
+				print "saving!"
+				#prereq.save()
 
 
 if __name__ == '__main__':
 	badges = Badge.objects.all()
+	save = len(sys.argv) > 1 and sys.argv[1] == '--save'
 
-	create_natural_prereqs(badges)
+	create_natural_prereqs(badges, save=save)
