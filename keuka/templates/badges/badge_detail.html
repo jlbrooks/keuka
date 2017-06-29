@@ -25,7 +25,8 @@
 							{{ action_text }} <i class="material-icons right">send</i>
 						</button>
 					</form>
-					
+					{% elif info_text %}
+					<p>{{ info_text }}</p>
 					{% endif %}
 				</div>
 			</div>

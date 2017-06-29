@@ -37,10 +37,35 @@ class Badge(models.Model):
     def requirements_html(self):
         return markdown.markdown(self.requirements)
 
+    def prereq_text(self):
+        text = 'Required badges: '
+        for prereq in self.prereqs.all():
+            text += str(prereq)
+            text += ', '
+        return text[:-2]
+
+
 class BadgeUser(User):
     class Meta:
         proxy = True
 
+    def can_increment_progress(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+            # We could prevent from moving to `earned` here
+            return True
+        except BadgeEarner.DoesNotExist:
+            # Ensure that we meet the pre-reqs to start a badge
+            for prereq in badge.prereqs.all():
+                try:
+                    req_earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = prereq.required_badge.id)
+                    if not BadgeEarner.status_geq(req_earner.status, prereq.min_badge_status):
+                        return False
+                except BadgeEarner.DoesNotExist:
+                    return False
+            return True
+
+    # Prereq: Must call can_increment_progress first
     def increment_progress(self, badge):
         try:
             earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
@@ -55,6 +80,10 @@ class BadgeUser(User):
         return earner
 
     def action_text(self, badge):
+        # No action if we can't make progress
+        if not self.can_increment_progress(badge):
+            return ''
+
         try:
             earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
         except BadgeEarner.DoesNotExist:
@@ -62,6 +91,16 @@ class BadgeUser(User):
 
         if earner.status == BadgeEarner.STARTED:
             return 'Submit For Approval'
+
+        return ''
+
+    def info_text(self, badge):
+        try:
+            earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
+        except BadgeEarner.DoesNotExist:
+            return badge.prereq_text()
+
+        # TODO: We could return something here when we are waiting for approval (out of scope of this PR)
 
         return ''
 
@@ -74,7 +113,6 @@ class BadgeUser(User):
     def earned_badges(self):
         return BadgeEarner.objects.filter(earner_id = self.id, status = BadgeEarner.EARNED)
 
-    
 
 
 class BadgeEarner(models.Model):
@@ -103,5 +141,20 @@ class BadgeEarner(models.Model):
             self.date_earned = timezone.now()
         self.save()
 
+    # Compares two statuses, returning whether the first is further along than or equal to the second
+    @classmethod
+    def status_geq(cls,a,b):
+        return a >= b
+
     class Meta:
         unique_together = ('earner', 'badge')
+
+
+class BadgePrerequisite(models.Model):
+    badge = models.ForeignKey(Badge, related_name='prereqs')
+    required_badge = models.ForeignKey(Badge, related_name='required_for_set')
+    min_badge_status = models.IntegerField(choices=BadgeEarner.STATUS_CHOICES, default=BadgeEarner.EARNED)
+
+    def __str__(self):
+        return str(self.required_badge) + ':' + BadgeEarner.STATUS_CHOICES[self.min_badge_status][1]
+
