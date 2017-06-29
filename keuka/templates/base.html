@@ -32,7 +32,6 @@
 				</ul>
 				<ul id="mobile-menu" class="side-nav">
 					{% if user.is_authenticated %}
-						<li>Welcome, {{ user.username }}</li>
 						<li><a href="{% url 'badges_for_user' %}">Your Badges</a></li>
 						<li><a href="{% url 'logout' %}">Logout</a></li>
 					{% else %}
