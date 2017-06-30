@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseBadRequest
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from keuka.forms import SignUpForm
 
@@ -37,17 +37,12 @@ def badge_detail(request, id):
 
     return render(request, 'badges/badge_detail.html', context)
 
-def badges_for_user(request):
-    if request.user.is_authenticated():
-        user = BadgeUser.objects.get(pk=request.user.id)
-        return render(request, 'badges/badges_for_user.html', {
-            'started_badges': user.started_badges(),
-            'pending_badges': user.pending_badges(),
-            'earned_badges': user.earned_badges(),
-        })
-    else:
-        form = SignUpForm()
-        return render(request, 'registration/signup.html', {'form': form})
+def profile(request, id):
+    user = get_object_or_404(BadgeUser, pk=id)
+    return render(request, 'badges/badges_for_user.html', {
+        'user': user,
+    })
+
 
 def signup(request):
     if request.method == 'POST':

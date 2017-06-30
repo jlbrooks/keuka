@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>{{user.first_name}}'s Profile</h1>
 <div class="row" id="badges">
 	<div class="col s12">
-		<h4>Badges You've Started</h4>
+		<h4>Badges {% if user == request.user %}You've{% else %}{{user.first_name}} has{% endif %} Started</h4>
 	</div>
 	<div class="list">
 		{% for started in started_badges %}
@@ -32,7 +33,7 @@
 		<h4>Badges Waiting for Approval</h4>
 	</div>
 	<div class="list">
-		{% for pending in pending_badges %}
+		{% for pending in user.pending_badges %}
 		<div class="col s12 m6 l4">
 			<div class="card">
 				<div class="card-image">
@@ -58,7 +59,7 @@
 		<h4>Badges Earned</h4>
 	</div>
 	<div class="list">
-		{% for earned in earned_badges %}
+		{% for earned in user.earned_badges %}
 		<div class="col s12 m6 l4">
 			<div class="card">
 				<div class="card-image">
