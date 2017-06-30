@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 from .models import Badge
@@ -43,3 +44,49 @@ class BadgePrerequsiteTests(TestCase):
                                  password='glass onion')
 		bu = BadgeUser.objects.get(pk=user.id)
 		self.assertIs(bu.can_increment_progress(badge), True)
+
+# Test views
+
+class BadgesForUserViewTests(TestCase):
+    def test_no_badges(self):        
+		user = User.objects.create_user(username='john',
+			email='jlennon@beatles.com',
+			password='glass onion')
+		self.client.login(username='john', password='glass onion')
+
+		response = self.client.get(reverse('badges_for_user'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Nothing!')
+		self.assertContains(response, 'No badges waiting approval.')
+		self.assertContains(response, 'No earned badges yet.')
+
+    def test_one_badge_started(self):        
+		user = User.objects.create_user(username='john',
+			email='jlennon@beatles.com',
+			password='glass onion')
+		self.client.login(username='john', password='glass onion')
+		badge = Badge.objects.create(title='Fun Badge')
+		badge_earner = BadgeEarner(badge=badge, earner=user)
+		badge_earner.save()
+
+		response = self.client.get(reverse('badges_for_user'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Fun Badge')
+		self.assertContains(response, 'No badges waiting approval.')
+		self.assertContains(response, 'No earned badges yet.')
+
+    def test_one_badge_for_approval(self):        
+		user = User.objects.create_user(username='john',
+			email='jlennon@beatles.com',
+			password='glass onion')
+		self.client.login(username='john', password='glass onion')
+		badge = Badge.objects.create(title='Fun Badge')
+		badge_earner = BadgeEarner(badge=badge, earner=user)
+		badge_earner.save()
+		badge_earner.advance_status()
+
+		response = self.client.get(reverse('badges_for_user'))
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Fun Badge')
+		self.assertContains(response, 'Nothing!')
+		self.assertContains(response, 'No earned badges yet.')
