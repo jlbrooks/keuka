@@ -40,7 +40,7 @@ def badge_detail(request, id):
 def profile(request, id):
     user = get_object_or_404(BadgeUser, pk=id)
     return render(request, 'badges/badges_for_user.html', {
-        'user': user,
+        'profile_user': user,
     })
 
 

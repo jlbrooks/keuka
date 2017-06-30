@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{user.first_name}}'s Profile</h1>
+<h1>{{profile_user.first_name}}'s Profile</h1>
 <div class="row" id="badges">
 
 
-	{% include "badges/badges_snippet.html" with badges=user.started_badges heading="Badges Started" empty_message="Nothing! Why not look for something to work on?" %}
+	{% include "badges/badges_snippet.html" with badges=profile_user.started_badges heading="Badges Started" empty_message="Nothing! Why not look for something to work on?" %}
 
-	{% include "badges/badges_snippet.html" with badges=user.pending_badges heading="Badges Waiting for Approval" empty_message="No badges waiting approval." %}
+	{% include "badges/badges_snippet.html" with badges=profile_user.pending_badges heading="Badges Waiting for Approval" empty_message="No badges waiting approval." %}
 
-	{% include "badges/badges_snippet.html" with badges=user.earned_badges heading="Badges Earned" empty_message="No earned badges yet." %}
+	{% include "badges/badges_snippet.html" with badges=profile_user.earned_badges heading="Badges Earned" empty_message="No earned badges yet." %}
 
 
 </div>
