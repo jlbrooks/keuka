@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^increment_progress/(?P<id>\d+)/$', views.increment_progress, name='increment_progress'),
-    url(r'^badges_for_user', views.badges_for_user, name='badges_for_user'),
+    url(r'^profile/(?P<id>\d+)/$', views.profile, name='profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
