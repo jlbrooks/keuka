@@ -18,9 +18,6 @@ class Badge(models.Model):
     image = models.ImageField(null=True, upload_to=BADGE_DIR)
     requirements = models.TextField(default='')
 
-    # users = models.ManyToManyField(BadgeUser, through='BadgeEarner')
-
-
     def __str__(self):
         return self.title
 
