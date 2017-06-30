@@ -54,7 +54,7 @@ class BadgesForUserViewTests(TestCase):
 			password='glass onion')
 		self.client.login(username='john', password='glass onion')
 
-		response = self.client.get(reverse('badges_for_user'))
+		response = self.client.get(reverse('profile', args=[user.id]))
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, 'Nothing!')
 		self.assertContains(response, 'No badges waiting approval.')
@@ -69,7 +69,7 @@ class BadgesForUserViewTests(TestCase):
 		badge_earner = BadgeEarner(badge=badge, earner=user)
 		badge_earner.save()
 
-		response = self.client.get(reverse('badges_for_user'))
+		response = self.client.get(reverse('profile', args=[user.id]))
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, 'Fun Badge')
 		self.assertContains(response, 'No badges waiting approval.')
@@ -85,7 +85,7 @@ class BadgesForUserViewTests(TestCase):
 		badge_earner.save()
 		badge_earner.advance_status()
 
-		response = self.client.get(reverse('badges_for_user'))
+		response = self.client.get(reverse('profile', args=[user.id]))
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, 'Fun Badge')
 		self.assertContains(response, 'Nothing!')

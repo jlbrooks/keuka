@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		{% endfor %}
-	{% else %}
+	{% elif user == request.user %}
 		<div class="col s12">
 			{{ empty_message }}
 		</div>
