@@ -53,9 +53,22 @@ class BadgesForUserViewTests(TestCase):
         	username='john', email='jlennon@beatles.com', password='glass onion')
         response = self.client.get(reverse('profile', args=[user.id]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Nothing!')
-        self.assertContains(response, 'No badges waiting approval.')
-        self.assertContains(response, 'No earned badges yet.')        
+        self.assertNotContains(response, 'Nothing!')
+        self.assertNotContains(response, 'No badges waiting approval.')
+        self.assertContains(response, 'No earned badges yet.') 
+
+    def test_looking_at_other_profile_while_being_logged_in(self):
+        user = User.objects.create_user(
+            username='john', email='jlennon@beatles.com', password='glass onion')
+        self.client.login(username='john', password='glass onion')
+        user2 = User.objects.create_user(
+            username='paul', email='pmac@beatles.com', password='hey jude')
+        response = self.client.get(reverse('profile', args=[user2.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Nothing!')
+        self.assertNotContains(response, 'No badges waiting approval.')
+        self.assertContains(response, 'No earned badges yet.') 
+
 
     def test_no_badges(self):
         user = User.objects.create_user(username='john',
