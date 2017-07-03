@@ -36,6 +36,20 @@ class BadgeEarnerTests(TestCase):
         badge_earner.advance_status()
         self.assertIs(badge_earner.status, BadgeEarner.EARNED)
 
+    def test_should_never_be_able_to_approve_a_badge(self):
+        badge = Badge.objects.create(title='Badge')
+        user = User.objects.create_user(username='john',
+                                 email='jlennon@beatles.com',
+                                 password='glass onion')
+        bu = BadgeUser.objects.get(pk=user.id)
+
+        badge_earner = BadgeEarner(badge=badge, earner=user)
+        self.assertIs(badge_earner.status, BadgeEarner.STARTED)
+        self.assertIs(bu.can_increment_progress(badge), True)
+        badge_earner.advance_status()
+        self.assertIs(badge_earner.status, BadgeEarner.NEEDS_APPROVAL)
+        self.assertIs(bu.can_increment_progress(badge), False)
+
 class BadgePrerequsiteTests(TestCase):
     def test_can_increment_when_no_prereq(self):
         badge = Badge.objects.create(title='Badge')

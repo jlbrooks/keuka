@@ -49,8 +49,8 @@ class BadgeUser(User):
     def can_increment_progress(self, badge):
         try:
             earner = BadgeEarner.objects.get(earner_id = self.id, badge_id = badge.id)
-            # We could prevent from moving to `earned` here
-            return True
+            # We will only update to "earned" within the admin console now, so disallow that
+            return earner.status != BadgeEarner.NEEDS_APPROVAL
         except BadgeEarner.DoesNotExist:
             # Ensure that we meet the pre-reqs to start a badge
             for prereq in badge.prereqs.all():
